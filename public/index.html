@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pengumuman Tender — Brantas Abipraya e-Proc</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --surface:#ffffff; --surface-2:#f0f2f5; --border:#e3e6ea;
+    --text:#161a1d; --muted:#5b6570; --brand:#0b5ed7; --brand-ink:#ffffff;
+    --ok:#0f9d58; --ok-bg:#e6f4ea; --warn:#b8860b; --warn-bg:#fbf1d8;
+    --done:#6b7280; --done-bg:#eceef1; --accent:#7c3aed;
+    --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.1);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#0e1116; --surface:#171b21; --surface-2:#1e242c; --border:#2a313a;
+      --text:#e6e9ee; --muted:#9aa4b2; --brand:#4b93ff; --brand-ink:#08111f;
+      --ok:#41c78a; --ok-bg:#122b20; --warn:#e0b53d; --warn-bg:#2c2410;
+      --done:#9aa4b2; --done-bg:#232830; --accent:#a97bff;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 1px 3px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+      --bg:#0e1116; --surface:#171b21; --surface-2:#1e242c; --border:#2a313a;
+      --text:#e6e9ee; --muted:#9aa4b2; --brand:#4b93ff; --brand-ink:#08111f;
+      --ok:#41c78a; --ok-bg:#122b20; --warn:#e0b53d; --warn-bg:#2c2410;
+      --done:#9aa4b2; --done-bg:#232830; --accent:#a97bff;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 1px 3px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:24px 16px 64px}
+  header.app{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; justify-content:space-between; margin-bottom:20px}
+  .brand{display:flex; gap:12px; align-items:center}
+  .brand .mark{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--brand),var(--accent));
+    display:grid;place-items:center;color:#fff;font-weight:800;font-size:18px;flex:0 0 auto}
+  h1{font-size:20px; margin:0; letter-spacing:-.01em}
+  .sub{color:var(--muted); font-size:13px; margin-top:2px}
+  .meta{text-align:right; font-size:12px; color:var(--muted)}
+  .meta b{color:var(--text)}
+  .btn{cursor:pointer; border:1px solid var(--border); background:var(--surface); color:var(--text);
+    border-radius:9px; padding:7px 12px; font-size:13px; font-weight:600}
+  .btn:hover{background:var(--surface-2)}
+
+  .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px}
+  .kpi{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px; box-shadow:var(--shadow)}
+  .kpi .label{font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.03em}
+  .kpi .value{font-size:24px; font-weight:800; margin-top:6px; letter-spacing:-.02em}
+  .kpi .value.small{font-size:19px}
+  .kpi .hint{font-size:12px; color:var(--muted); margin-top:4px}
+
+  .toolbar{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:14px; box-shadow:var(--shadow); display:grid;
+    grid-template-columns:1.6fr 1fr 1fr 1fr auto; gap:12px; align-items:end; margin-bottom:16px}
+  .field{display:flex; flex-direction:column; gap:5px; min-width:0}
+  .field label{font-size:12px; font-weight:600; color:var(--muted)}
+  .field input,.field select{width:100%; padding:9px 11px; border:1px solid var(--border);
+    border-radius:9px; background:var(--bg); color:var(--text); font-size:14px}
+  .field input:focus,.field select:focus{outline:2px solid var(--brand); outline-offset:0; border-color:var(--brand)}
+
+  .count{font-size:13px; color:var(--muted); margin:0 2px 10px}
+  .count b{color:var(--text)}
+
+  .table-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); overflow:hidden}
+  table{width:100%; border-collapse:collapse; font-size:14px}
+  thead th{position:sticky; top:0; background:var(--surface-2); text-align:left; font-size:12px;
+    text-transform:uppercase; letter-spacing:.03em; color:var(--muted); padding:12px 14px; font-weight:700;
+    border-bottom:1px solid var(--border); cursor:pointer; white-space:nowrap; user-select:none}
+  thead th.num{text-align:right}
+  thead th .arrow{opacity:.4; font-size:10px}
+  thead th[aria-sort="ascending"] .arrow,thead th[aria-sort="descending"] .arrow{opacity:1;color:var(--brand)}
+  tbody td{padding:13px 14px; border-bottom:1px solid var(--border); vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:var(--surface-2)}
+  td.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+  .paket-name{font-weight:600; cursor:pointer; color:var(--text); text-align:left; background:none;border:none;padding:0;font:inherit}
+  .paket-name:hover{color:var(--brand); text-decoration:underline}
+  .paket-id{font-size:11px; color:var(--muted); margin-top:3px; font-family:ui-monospace,Consolas,monospace}
+  .dates{white-space:nowrap; font-variant-numeric:tabular-nums}
+  .badge{display:inline-block; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; white-space:nowrap}
+  .b-ok{background:var(--ok-bg); color:var(--ok)}
+  .b-warn{background:var(--warn-bg); color:var(--warn)}
+  .b-done{background:var(--done-bg); color:var(--done)}
+  .chip{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border)}
+  .src-tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:7px;white-space:nowrap;
+    color:var(--sc,var(--brand)); background:color-mix(in srgb,var(--sc,var(--brand)) 14%,transparent);
+    border:1px solid color-mix(in srgb,var(--sc,var(--brand)) 35%,transparent)}
+
+  .empty{padding:48px 16px; text-align:center; color:var(--muted)}
+  .empty .big{font-size:15px; font-weight:600; color:var(--text); margin-bottom:4px}
+
+  footer.app{margin-top:22px; font-size:12px; color:var(--muted); line-height:1.6}
+  footer.app code{background:var(--surface-2); padding:1px 6px; border-radius:5px; font-size:11px}
+  .note{background:var(--warn-bg); border:1px solid color-mix(in srgb,var(--warn) 40%,transparent);
+    color:var(--text); border-radius:10px; padding:11px 14px; font-size:13px; margin-bottom:16px}
+
+  /* modal */
+  .modal-backdrop{position:fixed; inset:0; background:rgba(8,12,18,.55); display:none;
+    align-items:center; justify-content:center; padding:20px; z-index:50}
+  .modal-backdrop.open{display:flex}
+  .modal{background:var(--surface); border:1px solid var(--border); border-radius:16px;
+    max-width:720px; width:100%; max-height:85vh; overflow:auto; box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .modal-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+    padding:18px 20px; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--surface)}
+  .modal-head h2{font-size:16px; margin:0}
+  .modal-body{padding:18px 20px}
+  .dl{display:grid; grid-template-columns:150px 1fr; gap:10px 16px; font-size:14px}
+  .dl dt{color:var(--muted); font-weight:600}
+  .dl dd{margin:0}
+  .x{cursor:pointer;border:none;background:var(--surface-2);border-radius:8px;width:30px;height:30px;font-size:16px;color:var(--text);flex:0 0 auto}
+
+  @media (max-width:820px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .toolbar{grid-template-columns:1fr 1fr}
+    .toolbar .field.search{grid-column:1/-1}
+    .meta{text-align:left}
+    /* sembunyikan Kategori (kol 4) & HPS (kol 5) di layar kecil; info lengkap ada di modal */
+    thead th:nth-child(4),td:nth-child(4),thead th:nth-child(5),td:nth-child(5){display:none}
+    .dl{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="app">
+    <div class="brand">
+      <div class="mark">TND</div>
+      <div>
+        <h1>Pengumuman Tender</h1>
+        <div class="sub">Agregat e-Procurement · dipantau untuk PT HAKAASTON</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div>Data ditarik: <b id="genAt">—</b></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+        <button class="btn" id="refreshBtn">⟳ Perbarui data</button>
+        <button class="btn" id="themeBtn">◐ Tema</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="note" id="detailNote" style="display:none"></div>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="toolbar">
+    <div class="field search">
+      <label for="q">Cari paket / nomor</label>
+      <input id="q" type="search" placeholder="Ketik nama paket atau nomor…" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="src">Sumber</label>
+      <select id="src"><option value="">Semua Sumber</option></select>
+    </div>
+    <div class="field">
+      <label for="cat">Kategori</label>
+      <select id="cat"><option value="">Semua Kategori</option></select>
+    </div>
+    <div class="field">
+      <label for="status">Status</label>
+      <select id="status">
+        <option value="">Semua Status</option>
+        <option value="berlangsung">Berlangsung</option>
+        <option value="akan">Akan Datang</option>
+        <option value="selesai">Selesai</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>&nbsp;</label>
+      <button class="btn" id="reset">Reset filter</button>
+    </div>
+  </div>
+
+  <p class="count" id="count"></p>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="source" style="width:130px">Sumber <span class="arrow">▲▼</span></th>
+          <th data-sort="start" style="width:180px">Jadwal Tender <span class="arrow">▲▼</span></th>
+          <th data-sort="nama">Nama Paket <span class="arrow">▲▼</span></th>
+          <th data-sort="kategori" style="width:150px">Kategori <span class="arrow">▲▼</span></th>
+          <th data-sort="hps" class="num" style="width:170px">HPS (Rp) <span class="arrow">▲▼</span></th>
+          <th data-sort="statusRank" style="width:120px">Status <span class="arrow">▲▼</span></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="empty" id="empty" style="display:none">
+      <div class="big">Tidak ada paket yang cocok</div>
+      <div>Coba ubah kata kunci atau filter.</div>
+    </div>
+  </div>
+
+  <footer class="app">
+    <p><b>Catatan:</b> Data dikumpulkan dari beberapa portal e-Procurement tempat PT HAKAASTON terdaftar sebagai rekanan.
+    <b>Brantas Abipraya</b> menampilkan daftar <b>RUP</b> (rencana pengadaan yang akan dilaksanakan, publik).
+    <b>Waskita</b> menampilkan pengumuman tender tempat rekanan diundang/berpartisipasi (via login).
+    Nilai HPS hanya tampil bila dipublikasikan portal.</p>
+    <p>Data di-cache server selama 30 menit. Klik <b>Perbarui data</b> untuk menarik ulang langsung dari portal.</p>
+  </footer>
+</div>
+
+<div class="modal-backdrop" id="modalBack">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="modal-head">
+      <h2 id="mTitle">Detail Paket</h2>
+      <button class="x" id="mClose" aria-label="Tutup">✕</button>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+
+<script>
+(async function(){
+  "use strict";
+  var DATA;
+  var tbodyEl=document.getElementById('rows');
+  tbodyEl.innerHTML='<tr><td colspan="6" class="empty">Mengambil data dari portal e-Proc…</td></tr>';
+
+  var refreshBtn=document.getElementById('refreshBtn');
+  refreshBtn.addEventListener('click',async function(){
+    refreshBtn.disabled=true; refreshBtn.textContent='⟳ Memperbarui…';
+    try{
+      var r=await fetch('/api/tenders?refresh=1');
+      if(!r.ok) throw new Error((await r.json()).error||r.statusText);
+      location.reload();
+    }catch(e){
+      alert('Gagal memperbarui: '+e.message);
+      refreshBtn.disabled=false; refreshBtn.textContent='⟳ Perbarui data';
+    }
+  });
+
+  try {
+    var res=await fetch('/api/tenders');
+    DATA=await res.json();
+    if(!res.ok) throw new Error(DATA.error||res.statusText);
+  } catch(e){
+    tbodyEl.innerHTML='';
+    var em=document.getElementById('empty'); em.style.display='block';
+    em.innerHTML='<div class="big">Gagal memuat data</div><div>'+String(e.message).replace(/</g,'&lt;')+'</div>';
+    return;
+  }
+
+  var idr = new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0});
+  var fmtDate = function(s){ if(!s) return '—'; var d=new Date(s); if(isNaN(d)) return s;
+    return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}); };
+
+  function statusOf(r){
+    var t = DATA.today ? new Date(DATA.today) : new Date();
+    t.setHours(0,0,0,0);
+    var s = r.start? new Date(r.start):null, e = r.end? new Date(r.end):null;
+    if(s && t < s) return {key:'akan', label:'Akan Datang', cls:'b-warn', rank:1};
+    if(e && t > e) return {key:'selesai', label:'Selesai', cls:'b-done', rank:3};
+    return {key:'berlangsung', label:'Berlangsung', cls:'b-ok', rank:2};
+  }
+
+  // enrich
+  DATA.rows.forEach(function(r){ var st=statusOf(r); r._st=st; r.statusRank=st.rank; });
+
+  var sources = DATA.sources || [];
+  function srcColor(name){ var s=sources.filter(function(x){return x.name===name;})[0]; return s?s.color:'var(--muted)'; }
+
+  // ---- KPIs
+  (function(){
+    var rows=DATA.rows;
+    var total=rows.length;
+    var aktif=rows.filter(function(r){return r._st.key==='berlangsung';}).length;
+    var akan=rows.filter(function(r){return r._st.key==='akan';}).length;
+    var el=document.getElementById('kpis');
+    var srcHint=sources.map(function(s){return s.name+': '+s.count;}).join(' · ')||'—';
+    var cards=[
+      {label:'Total Pengumuman', value:total, hint:srcHint},
+      {label:'Sedang Berlangsung', value:aktif, hint:'dalam rentang jadwal tender'},
+      {label:'Akan Datang', value:akan, hint:'jadwal belum dibuka'},
+      {label:'Portal Sumber', value:sources.length, hint:sources.map(function(s){return s.name;}).join(', ')||'—'}
+    ];
+    el.innerHTML=cards.map(function(c){
+      return '<div class="kpi"><div class="label">'+c.label+'</div>'+
+        '<div class="value'+(c.small?' small':'')+'">'+c.value+'</div>'+
+        '<div class="hint">'+esc(c.hint)+'</div></div>';
+    }).join('');
+  })();
+
+  // ---- populate source + category filters
+  (function(){
+    var ssel=document.getElementById('src');
+    sources.forEach(function(s){ var o=document.createElement('option'); o.value=s.name; o.textContent=s.name+' ('+s.count+')'; ssel.appendChild(o); });
+    var sel=document.getElementById('cat');
+    var cats=DATA.categories && DATA.categories.length ? DATA.categories
+      : Array.from(new Set(DATA.rows.map(function(r){return r.kategori;}))).map(function(n){return {id:n,name:n};});
+    cats.forEach(function(c){ var o=document.createElement('option'); o.value=c.name; o.textContent=c.name; sel.appendChild(o); });
+  })();
+
+  document.getElementById('genAt').textContent = DATA.generatedAt
+    ? new Date(DATA.generatedAt).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'}) : '—';
+
+  // ---- login/source status note
+  (function(){
+    var probs=sources.filter(function(s){return s.login && s.login.ok===false && s.login.attempted!==false;});
+    var infos=sources.filter(function(s){return s.login && s.login.attempted===false;});
+    if(!probs.length && !infos.length) return;
+    var n=document.getElementById('detailNote'); n.style.display='block';
+    var parts=[];
+    probs.forEach(function(s){ parts.push('⚠️ <b>'+esc(s.name)+'</b>: '+esc(s.login.message)); });
+    infos.forEach(function(s){ parts.push('ℹ️ <b>'+esc(s.name)+'</b>: '+esc(s.login.message)); });
+    n.innerHTML=parts.join('<br>')+'<br><span style="color:var(--muted)">Sesuaikan kredensial di file <code>.env</code> lalu klik <b>Perbarui data</b>.</span>';
+  })();
+
+  // ---- render / filter / sort
+  var state={q:'',src:'',cat:'',status:'',sort:'start',dir:'desc'};
+  var tbody=document.getElementById('rows'), empty=document.getElementById('empty'), countEl=document.getElementById('count');
+
+  function view(){
+    var q=state.q.trim().toLowerCase();
+    var list=DATA.rows.filter(function(r){
+      if(q && (r.nama||'').toLowerCase().indexOf(q)<0 && (''+(r.number||'')).toLowerCase().indexOf(q)<0) return false;
+      if(state.src && r.source!==state.src) return false;
+      if(state.cat && r.kategori!==state.cat) return false;
+      if(state.status && r._st.key!==state.status) return false;
+      return true;
+    });
+    var key=state.sort, dir=state.dir==='asc'?1:-1;
+    list.sort(function(a,b){
+      var x=a[key], y=b[key];
+      if(key==='hps'||key==='statusRank'){ x=x||0; y=y||0; return (x-y)*dir; }
+      if(key==='start'){ x=a.start||'', y=b.start||''; }
+      x=(''+ (x==null?'':x)).toLowerCase(); y=(''+(y==null?'':y)).toLowerCase();
+      return x<y?-1*dir : x>y?1*dir : 0;
+    });
+    return list;
+  }
+
+  function render(){
+    var list=view();
+    countEl.innerHTML='Menampilkan <b>'+list.length+'</b> dari <b>'+DATA.rows.length+'</b> pengumuman';
+    if(!list.length){ tbody.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display='none';
+    tbody.innerHTML=list.map(function(r,i){
+      var idx=DATA.rows.indexOf(r);
+      return '<tr>'+
+        '<td><span class="src-tag" style="--sc:'+srcColor(r.source)+'">'+esc(r.source)+'</span></td>'+
+        '<td class="dates">'+fmtDate(r.start)+'<div class="paket-id">s.d. '+fmtDate(r.end)+'</div></td>'+
+        '<td><button class="paket-name" data-i="'+idx+'">'+esc(r.nama)+'</button>'+
+          (r.number?'<div class="paket-id">'+esc(r.number)+'</div>':'')+
+          (r.location?'<div class="paket-id">📍 '+esc(r.location)+'</div>':'')+'</td>'+
+        '<td><span class="chip">'+esc(r.kategori||'—')+'</span></td>'+
+        '<td class="num">'+ (r.hps? idr.format(r.hps) : '<span style="color:var(--muted)">—</span>') +'</td>'+
+        '<td><span class="badge '+r._st.cls+'">'+r._st.label+'</span>'+
+          (r.participantState?'<div class="paket-id">'+esc(r.participantState)+'</div>':'')+'</td>'+
+      '</tr>';
+    }).join('');
+  }
+  function esc(s){ return (s==null?'':''+s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  // events
+  var qEl=document.getElementById('q');
+  qEl.addEventListener('input',function(){state.q=this.value; render();});
+  document.getElementById('src').addEventListener('change',function(){state.src=this.value; render();});
+  document.getElementById('cat').addEventListener('change',function(){state.cat=this.value; render();});
+  document.getElementById('status').addEventListener('change',function(){state.status=this.value; render();});
+  document.getElementById('reset').addEventListener('click',function(){
+    state.q=state.src=state.cat=state.status=''; qEl.value='';
+    document.getElementById('src').value=''; document.getElementById('cat').value=''; document.getElementById('status').value=''; render();
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('thead th'),function(th){
+    th.addEventListener('click',function(){
+      var k=th.getAttribute('data-sort'); if(!k) return;
+      if(state.sort===k){ state.dir=state.dir==='asc'?'desc':'asc'; } else { state.sort=k; state.dir= (k==='hps'||k==='start')?'desc':'asc'; }
+      Array.prototype.forEach.call(document.querySelectorAll('thead th'),function(o){o.removeAttribute('aria-sort');});
+      th.setAttribute('aria-sort', state.dir==='asc'?'ascending':'descending');
+      render();
+    });
+  });
+
+  // detail modal
+  var back=document.getElementById('modalBack');
+  tbody.addEventListener('click',function(e){
+    var b=e.target.closest('.paket-name'); if(!b) return;
+    var r=DATA.rows[+b.getAttribute('data-i')]; if(!r) return;
+    document.getElementById('mTitle').textContent=r.nama||'Detail Paket';
+    var rows=[
+      ['Sumber', '<span class="src-tag" style="--sc:'+srcColor(r.source)+'">'+esc(r.source)+'</span>'],
+      ['Nomor', r.number?esc(r.number):'—'],
+      ['Jenis Tender', esc(r.tenderType||r.kategori||'—')],
+      ['HPS', r.hps? idr.format(r.hps):'<span style="color:var(--muted)">tidak dipublikasikan</span>'],
+      ['Jadwal Buka', fmtDate(r.start)],
+      ['Jadwal Tutup', fmtDate(r.end)],
+      ['Status', '<span class="badge '+r._st.cls+'">'+r._st.label+'</span>'],
+      ['Lokasi', r.location?esc(r.location):'—']
+    ];
+    if(r.participantState) rows.push(['Partisipasi', esc(r.participantState)]);
+    if(r.state) rows.push(['State', esc(r.state)]);
+    if(r.extra && r.extra.buyer) rows.push(['Buyer', esc(r.extra.buyer)]);
+    if(r.extra && r.extra.evalMethod) rows.push(['Metode Evaluasi', esc(r.extra.evalMethod)]);
+    var body='<dl class="dl">'+rows.map(function(kv){return '<dt>'+kv[0]+'</dt><dd>'+kv[1]+'</dd>';}).join('')+'</dl>';
+    if(r.scopeOfWork){ body+='<hr style="border:none;border-top:1px solid var(--border);margin:16px 0">'+
+      '<div style="font-size:13px"><b>Lingkup Pekerjaan</b><p style="color:var(--muted);white-space:pre-wrap;margin-top:6px">'+esc(r.scopeOfWork)+'</p></div>'; }
+    document.getElementById('mBody').innerHTML=body;
+    back.classList.add('open');
+  });
+  function closeM(){ back.classList.remove('open'); }
+  document.getElementById('mClose').addEventListener('click',closeM);
+  back.addEventListener('click',function(e){ if(e.target===back) closeM(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeM(); });
+
+  // theme toggle (persist)
+  var tb=document.getElementById('themeBtn');
+  try{ var saved=localStorage.getItem('rup-theme'); if(saved) document.documentElement.setAttribute('data-theme',saved); }catch(e){}
+  tb.addEventListener('click',function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    var next = cur==='dark'?'light':cur==='light'?'dark': (matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark');
+    document.documentElement.setAttribute('data-theme',next);
+    try{ localStorage.setItem('rup-theme',next); }catch(e){}
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

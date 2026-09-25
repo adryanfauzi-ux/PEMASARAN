@@ -1,0 +1,20 @@
+# Kredensial & rahasia — JANGAN pernah di-commit
+.env
+.env.local
+*.local
+
+# Data privat tertarik dari portal (data tender rekanan)
+data/
+
+# Artefak yang di-generate
+tender-dashboard.html
+
+# Dependencies (aplikasi ini tanpa dependency, tapi jaga-jaga)
+node_modules/
+
+# OS / editor
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+*.log

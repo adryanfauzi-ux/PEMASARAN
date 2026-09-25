@@ -1,0 +1,13 @@
+{
+  "name": "pengumuman-tender",
+  "version": "1.0.0",
+  "description": "Web app pengumuman tender (RUP) dari e-Proc PT Brantas Abipraya",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
