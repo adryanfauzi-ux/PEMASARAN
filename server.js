@@ -10,7 +10,8 @@ const ROOT = __dirname;
 loadEnv(path.join(ROOT, '.env'));
 
 const PORT = Number(process.env.PORT || 3000);
-const HOST = process.env.HOST || '127.0.0.1';
+// Di platform hosting (Railway/Render/dll) wajib bind ke 0.0.0.0 agar dapat dijangkau proxy.
+const HOST = process.env.HOST || '0.0.0.0';
 const CACHE_MINUTES = Number(process.env.CACHE_MINUTES || 30);
 const DATA_DIR = path.join(ROOT, 'data');
 const PUBLIC_DIR = path.join(ROOT, 'public');
